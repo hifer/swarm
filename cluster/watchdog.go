@@ -89,6 +89,13 @@ func (w *Watchdog) rescheduleContainers(e *Engine) {
 					log.Errorf("Failed to start rescheduled container %s: %v", newContainer.ID, err)
 				}
 			}
+			else {
+				log.Infof("Container %s not running", c.ID, newContainer.ID)
+				newContainer2, err := w.cluster.CreateContainer(c.Config, c.Info.Name, nil)
+				if err := w.cluster.StartContainer(newContainer2, nil); err != nil {
+					log.Errorf("Failed to start rescheduled container %s: %v", newContainer2.ID, err)
+				}
+			}
 		}
 	}
 
